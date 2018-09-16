@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'sample.Main'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+jar {
+    baseName = 'peaks'
+    version =  '0.0.2'
+}
+
+
+dependencies {
+    compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+}
