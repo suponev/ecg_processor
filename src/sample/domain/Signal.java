@@ -1,9 +1,6 @@
 package sample.domain;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
+
 
 public class Signal {
     double[] x;
@@ -31,5 +28,9 @@ public class Signal {
 
     public double[] getY() {
         return y;
+    }
+
+    public int length() {
+        return y.length;
     }
 }

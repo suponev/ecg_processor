@@ -5,43 +5,26 @@
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
 
-<GridPane alignment="center" hgap="10" prefHeight="660.0" prefWidth="930.0" stylesheets="chart.style.css" vgap="10" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-
-    <columnConstraints>
-        <ColumnConstraints />
-        <ColumnConstraints />
-        <ColumnConstraints />
-    </columnConstraints>
-
-    <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
-    </rowConstraints>
-
-    <children>
-        <Button mnemonicParsing="false" onAction="#clickApply" prefHeight="25.0" prefWidth="110.0" text="Button" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-        <ChoiceBox fx:id="selectFiles" onDragDetected="#selectSignalFile" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-        <LineChart fx:id="chart" maxWidth="1201.0" prefHeight="562.0" prefWidth="910.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
-            <xAxis>
-                <NumberAxis side="BOTTOM" />
-            </xAxis>
-            <yAxis>
-                <NumberAxis side="LEFT" />
-            </yAxis>
-            <cursor>
-                <Cursor fx:constant="CROSSHAIR" />
-            </cursor>
-        </LineChart>
-    </children>
-
-</GridPane>
+<Pane prefHeight="608.0" prefWidth="680.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <Button layoutX="140.0" layoutY="102.0" mnemonicParsing="false" onAction="#clickReset" prefHeight="25.0" prefWidth="139.0" text="Сброс" textAlignment="JUSTIFY" textFill="RED" />
+      <ChoiceBox fx:id="selectFiles" layoutX="14.0" layoutY="25.0" onDragDetected="#selectSignalFile" prefHeight="25.0" prefWidth="266.0" />
+      <Button layoutX="140.0" layoutY="69.0" mnemonicParsing="false" onAction="#clickApply" prefHeight="25.0" prefWidth="139.0" text="Применить" />
+      <TextField fx:id="sigmaInput" layoutX="15.0" layoutY="69.0" prefHeight="25.0" prefWidth="114.0" promptText="Сигма" />
+      <LineChart fx:id="chart" layoutX="11.0" layoutY="154.0" maxWidth="1201.0" prefHeight="434.0" prefWidth="656.0">
+         <xAxis>
+            <NumberAxis side="BOTTOM" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis side="LEFT" />
+         </yAxis>
+         <cursor>
+            <Cursor fx:constant="CROSSHAIR" />
+         </cursor>
+      </LineChart>
+      <TextField fx:id="isolineInput" layoutX="15.0" layoutY="102.0" prefHeight="25.0" prefWidth="114.0" promptText="Изолиния" />
+   </children>
+</Pane>

@@ -1,8 +1,10 @@
-package sample.Services;
+package sample.services;
 
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.input.MouseEvent;
 
+import java.beans.EventHandler;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
@@ -18,6 +20,7 @@ public class ChartService {
         chart.setTitle("Фрагмент ЭКГ");
         chart.setCreateSymbols(false);
 
+
     }
 
     public void clear() {
@@ -32,11 +35,16 @@ public class ChartService {
         series.setName(name);
         ArrayList<XYChart.Data> data = new ArrayList<>();
         for (int i = 0; i < x.length; i++) {
-            data.add(new XYChart.Data(x[i], y[i]));
+            XYChart.Data xy = new XYChart.Data(x[i], y[i]);
+            data.add(xy);
         }
         series.getData().addAll(data);
-        chart.getData().add(series);
 
+        chart.getData().add(series);
+        series.getNode().setOnMouseClicked(e -> {
+
+            System.out.println(chart.getXAxis().getValueForDisplay(e.getX()));
+        });
     }
 
 

@@ -5,6 +5,7 @@ import sample.domain.IPhiFunction;
 
 public class GaussPeakProcessor {
 
+    double hForI = 0.01;
     private IPhiFunction phi;
 
     private double sig = 5;
@@ -35,7 +36,9 @@ public class GaussPeakProcessor {
 
         this.x = x;
         this.y = y;
+        //this.calcalate();
     }
+
 
     public void calcalate() {
         computeMu();
@@ -45,7 +48,7 @@ public class GaussPeakProcessor {
         computeA();
     }
 
-    void computeM() {
+    private void computeM() {
         m = new double[3];
         double det = b[2] * b[2] * b[2] + b[1] * b[1] * b[4] + b[3] * b[3] * b[0] - b[0] * b[2] * b[4] - 2 * b[1] * b[2] * b[3];
         double det1 = b[3] * b[2] * b[2] + b[1] * b[1] * b[5] + b[4] * b[3] * b[0] - b[0] * b[2] * b[5] - b[4] * b[1] * b[2] - b[1] * b[3] * b[3];
@@ -84,7 +87,7 @@ public class GaussPeakProcessor {
 
     }
 
-    double[] computeA() {
+    private double[] computeA() {
         a = new double[m.length];
         if (b.length == 4) {
             a[0] = (b[1] - b[0] * m[1]) / (m[0] - m[1]);
@@ -100,7 +103,7 @@ public class GaussPeakProcessor {
         return a;
     }
 
-    void computeB() {
+    private void computeB() {
         b[0] = mu[0] / i[0];
 
         b[1] = (mu[1] - i[1] * b[0]) / i[0];
@@ -114,21 +117,33 @@ public class GaussPeakProcessor {
         b[5] = (mu[5] + i[5] * b[0] + 5 * i[4] * b[1] + 10 * i[3] * b[2] + 10 * i[2] * b[3] + 5 * i[1] * b[4]) / i[0];
     }
 
-    void computeI() {
-        double[] yModeling = new double[x.length];
+    private void computeI() {
+        double[] yPhi, xPhi;
+        double x_start = x[0];
+        double x_finish = x[x.length - 1];
+        int n = (int) ((x_finish - x_start) / hForI);
+        yPhi = new double[n];
+        xPhi = new double[n];
         for (int i = 0; i < y.length - 1; i++) {
-            yModeling[i] = phi.call(x[i], 1, 0, sig);
+            xPhi[i] = x_start + i * hForI;
+            yPhi[i] = phi.call(xPhi[i], 1, 1, sig);
         }
         for (int i = 0; i < c; i++) {
-            this.i[i] = FunctionHelper.calculateMu(this.x, yModeling, i);
+            this.i[i] = FunctionHelper.calculateMu(xPhi, yPhi, i);
         }
     }
 
-    void computeMu() {
+    private void computeMu() {
         for (int order = 0; order < c; order++) {
             mu[order] = FunctionHelper.calculateMu(x, y, order);
         }
     }
 
+    public double getSig() {
+        return sig;
+    }
 
+    public void setSig(double sig) {
+        this.sig = sig;
+    }
 }
