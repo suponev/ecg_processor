@@ -2,10 +2,12 @@ package sample;
 
 import sample.domain.FunctionHelper;
 import sample.domain.IPhiFunction;
+import sample.services.ChartService;
 
 public class GaussPeakProcessor {
 
-    double hForI = 0.01;
+    double hForI = 0.0001;
+  // double hForI = 0.1;
     private IPhiFunction phi;
 
     private double sig = 5;
@@ -21,11 +23,16 @@ public class GaussPeakProcessor {
 
     private int c = 6;
 
+    private ChartService chartService;
 
     public double model(double x) {
         return phi.call(x, a[0], m[0], sig)
                 + phi.call(x, a[1], m[1], sig)
                 + phi.call(x, a[2], m[2], sig);
+    }
+
+    public void setChartService(ChartService chartService) {
+        this.chartService = chartService;
     }
 
     public GaussPeakProcessor(double[] x, double[] y, IPhiFunction phi) {
@@ -36,11 +43,11 @@ public class GaussPeakProcessor {
 
         this.x = x;
         this.y = y;
-        //this.calcalate();
+        //this.calculate();
     }
 
 
-    public void calcalate() {
+    public void calculate() {
         computeMu();
         computeI();
         computeB();
@@ -89,17 +96,17 @@ public class GaussPeakProcessor {
 
     private double[] computeA() {
         a = new double[m.length];
-        if (b.length == 4) {
-            a[0] = (b[1] - b[0] * m[1]) / (m[0] - m[1]);
-            a[1] = b[0] - a[0];
-        } else {
+//        if (b.length == 4) {
+//            a[0] = (b[1] - b[0] * m[1]) / (m[0] - m[1]);
+//            a[1] = b[0] - a[0];
+//        } else {
 
             double detA = Matrix.det(1, 1, 1, m[0], m[1], m[2], m[0] * m[0], m[1] * m[1], m[2] * m[2]);
             a[0] = Matrix.det(b[0], 1, 1, b[1], m[1], m[2], b[2], m[1] * m[1], m[2] * m[2]) / detA;
             a[1] = Matrix.det(1, b[0], 1, m[0], b[1], m[2], m[0] * m[0], b[2], m[2] * m[2]) / detA;
             a[2] = Matrix.det(1, 1, b[0], m[0], m[1], b[1], m[0] * m[0], m[1] * m[1], b[2]) / detA;
 
-        }
+
         return a;
     }
 
@@ -119,17 +126,21 @@ public class GaussPeakProcessor {
 
     private void computeI() {
         double[] yPhi, xPhi;
-        double x_start = x[0];
-        double x_finish = x[x.length - 1];
+        double x_start = -500; //x[0];
+        double x_finish = 500;//x[x.length - 1];
         int n = (int) ((x_finish - x_start) / hForI);
         yPhi = new double[n];
         xPhi = new double[n];
-        for (int i = 0; i < y.length - 1; i++) {
+        for (int i = 0; i < n; i++) {
             xPhi[i] = x_start + i * hForI;
-            yPhi[i] = phi.call(xPhi[i], 1, 1, sig);
+            yPhi[i] = phi.call(xPhi[i], 1, 0.5, sig);
+        }
+        if (chartService != null) {
+            chartService.add("phi", xPhi, yPhi);
         }
         for (int i = 0; i < c; i++) {
             this.i[i] = FunctionHelper.calculateMu(xPhi, yPhi, i);
+             System.out.println("I[" + i + "] = " + this.i[i]);
         }
     }
 

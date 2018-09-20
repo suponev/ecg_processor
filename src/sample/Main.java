@@ -54,7 +54,7 @@ public class Main extends Application {
         }
 
         GaussPeakProcessor gpp = new GaussPeakProcessor(x, y, FunctionsRepository.repository.get("gauss"));
-        gpp.calcalate();
+        gpp.calculate();
 
         for (int i = 0; i < n; i++) {
 

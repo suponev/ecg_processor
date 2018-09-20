@@ -1,6 +1,5 @@
 package sample;
 
-import javafx.scene.Node;
 import sample.domain.FunctionsRepository;
 import sample.services.ChartService;
 import sample.services.FileService;
@@ -29,7 +28,7 @@ public class MainService {
 
     public void selectFile(String fileName) {
         this.fullSignal = fileService.getSignalsMap().get(fileName);
-       // this.chartService.add("Source", fullSignal.getX(), fullSignal.getY());
+        // this.chartService.add("Source", fullSignal.getX(), fullSignal.getY());
 
     }
 
@@ -41,11 +40,12 @@ public class MainService {
         gaussPeak = new GaussPeakProcessor(
                 fullSignal.getX(),
                 y,
-                FunctionsRepository.repository.get("gauss")
+                FunctionsRepository.repository.get("double-gauss")
         );
+       // gaussPeak.setChartService(chartService);
         gaussPeak.setSig(sigma);
-         this.chartService.add("Source-Shifted", fullSignal.getX(), y);
-        gaussPeak.calcalate();
+        this.chartService.add("Source-Shifted", fullSignal.getX(), y);
+        gaussPeak.calculate();
         double[] model = new double[fullSignal.length()];
 
         for (int i = 0; i < fullSignal.length(); i++) {
