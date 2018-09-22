@@ -16,8 +16,8 @@ public class FunctionsRepository {
 
         repository.put("double-gauss",
                 (x, a, m, sigma) ->
-                        a * Math.exp(-((x - m) * (x - m)) / 2 / sigma / sigma)
-                                - 0.9 * (a * Math.exp(-((x + m) * (x + m)) / 2 / sigma / sigma))
+                        a * Math.exp(-((x + 0.5 - m) * (x + 0.5 - m)) / 2 / sigma / sigma)
+                                - 0.3 * (a * Math.exp(-((x - 0.5 - m) * (x - 0.5 - m)) / 2 / sigma / sigma))
         );
     }
 }

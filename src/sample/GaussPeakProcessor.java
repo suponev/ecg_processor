@@ -6,8 +6,8 @@ import sample.services.ChartService;
 
 public class GaussPeakProcessor {
 
-    double hForI = 0.0001;
-  // double hForI = 0.1;
+    double hForI = 0.01;
+    // double hForI = 0.1;
     private IPhiFunction phi;
 
     private double sig = 5;
@@ -69,8 +69,8 @@ public class GaussPeakProcessor {
         double d = -c0;
 
         double p = c2;
-        double q = c1;
-        double r = c0;
+        // double q = c1;
+        // double r = c0;
         double p1 = c - bb * bb / 3;
         double q1 = (2 * bb * bb * bb / 27) - (bb * c / 3) + d;
         double Q = (Math.pow((p1 / 3.0), 3)) + Math.pow((q1 / 2.0), 2);
@@ -101,33 +101,57 @@ public class GaussPeakProcessor {
 //            a[1] = b[0] - a[0];
 //        } else {
 
-            double detA = Matrix.det(1, 1, 1, m[0], m[1], m[2], m[0] * m[0], m[1] * m[1], m[2] * m[2]);
-            a[0] = Matrix.det(b[0], 1, 1, b[1], m[1], m[2], b[2], m[1] * m[1], m[2] * m[2]) / detA;
-            a[1] = Matrix.det(1, b[0], 1, m[0], b[1], m[2], m[0] * m[0], b[2], m[2] * m[2]) / detA;
-            a[2] = Matrix.det(1, 1, b[0], m[0], m[1], b[1], m[0] * m[0], m[1] * m[1], b[2]) / detA;
+        double detA = Matrix.det(
+                1, 1, 1,
+                m[0], m[1], m[2],
+                m[0] * m[0], m[1] * m[1], m[2] * m[2]
+        );
+        a[0] = Matrix.det(b[0], 1, 1, b[1], m[1], m[2], b[2], m[1] * m[1], m[2] * m[2]) / detA;
+        a[1] = Matrix.det(1, b[0], 1, m[0], b[1], m[2], m[0] * m[0], b[2], m[2] * m[2]) / detA;
+        a[2] = Matrix.det(1, 1, b[0], m[0], m[1], b[1], m[0] * m[0], m[1] * m[1], b[2]) / detA;
 
-
+        System.out.println("A's :  " + a[0] + " " + a[1] + " " + a[2] + " ");
         return a;
     }
 
     private void computeB() {
         b[0] = mu[0] / i[0];
 
-        b[1] = (mu[1] - i[1] * b[0]) / i[0];
+        b[1] = (mu[1]
+                - (i[1] * b[0])
+        ) / i[0];
 
-        b[2] = (mu[2] - i[2] * b[0] + 2 * i[1] * b[1]) / i[0];
+        b[2] = (mu[2]
+                - ((i[2] * b[0])
+                + (2 * i[1] * b[1]))
+        ) / i[0];
 
-        b[3] = (mu[3] - i[3] * b[0] + 3 * i[2] * b[1] + 3 * i[1] * b[2]) / i[0];
+        b[3] = (mu[3]
+                - ((i[3] * b[0])
+                + (3 * i[2] * b[1])
+                + 3 * (i[1] * b[2]))
+        ) / i[0];
 
-        b[4] = (mu[4] - i[4] * b[0] + 4 * i[3] * b[1] + 6 * i[2] * b[2] + 4 * i[1] * b[3]) / i[0];
+        b[4] = (mu[4]
+                - ((i[4] * b[0])
+                + (4 * i[3] * b[1])
+                + (6 * i[2] * b[2])
+                + (4 * i[1] * b[3]))
+        ) / i[0];
 
-        b[5] = (mu[5] + i[5] * b[0] + 5 * i[4] * b[1] + 10 * i[3] * b[2] + 10 * i[2] * b[3] + 5 * i[1] * b[4]) / i[0];
+        b[5] = (mu[5]
+                - ((i[5] * b[0])
+                + (5 * i[4] * b[1])
+                + (10 * i[3] * b[2])
+                + (10 * i[2] * b[3])
+                + (5 * i[1] * b[4]))
+        ) / i[0];
     }
 
     private void computeI() {
         double[] yPhi, xPhi;
-        double x_start = -500; //x[0];
-        double x_finish = 500;//x[x.length - 1];
+        double x_start = -250; //x[0];
+        double x_finish = 250;//x[x.length - 1];
         int n = (int) ((x_finish - x_start) / hForI);
         yPhi = new double[n];
         xPhi = new double[n];
@@ -138,10 +162,20 @@ public class GaussPeakProcessor {
         if (chartService != null) {
             chartService.add("phi", xPhi, yPhi);
         }
+
         for (int i = 0; i < c; i++) {
             this.i[i] = FunctionHelper.calculateMu(xPhi, yPhi, i);
-             System.out.println("I[" + i + "] = " + this.i[i]);
+            System.out.println("I[" + i + "] = " + this.i[i]);
         }
+
+       /*/ double sqrt2pi = Math.sqrt(2 * Math.PI);
+        this.i[0] = sig * sqrt2pi + sig * sqrt2pi;
+        this.i[1] = 0;
+        this.i[2] = Math.pow(sig, 3) * sqrt2pi + Math.pow(sig, 3) * sqrt2pi;
+        this.i[3] = 0;
+        this.i[4] = 3 * Math.pow(sig, 2) * sqrt2pi + 3 * Math.pow(sig, 2) * sqrt2pi;
+        this.i[5] = 0;/*/
+
     }
 
     private void computeMu() {
@@ -156,5 +190,9 @@ public class GaussPeakProcessor {
 
     public void setSig(double sig) {
         this.sig = sig;
+    }
+
+    public double gauss(double x, double a, double m, double sigma) {
+        return a * Math.exp(-((x - m) * (x - m)) / (2 * sigma * sigma));
     }
 }

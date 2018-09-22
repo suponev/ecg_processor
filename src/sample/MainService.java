@@ -42,7 +42,7 @@ public class MainService {
                 y,
                 FunctionsRepository.repository.get("double-gauss")
         );
-       // gaussPeak.setChartService(chartService);
+        //gaussPeak.setChartService(chartService);
         gaussPeak.setSig(sigma);
         this.chartService.add("Source-Shifted", fullSignal.getX(), y);
         gaussPeak.calculate();
