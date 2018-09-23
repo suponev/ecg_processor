@@ -6,11 +6,11 @@ import sample.services.ChartService;
 
 public class GaussPeakProcessor {
 
-    double hForI = 0.01;
+    double hForI = 0.001;
     // double hForI = 0.1;
     private IPhiFunction phi;
 
-    private double sig = 5;
+    private double sigma = 5;
 
     private double[] x;
     private double[] y;
@@ -26,9 +26,9 @@ public class GaussPeakProcessor {
     private ChartService chartService;
 
     public double model(double x) {
-        return phi.call(x, a[0], m[0], sig)
-                + phi.call(x, a[1], m[1], sig)
-                + phi.call(x, a[2], m[2], sig);
+        return phi.call(x, a[0], m[0], sigma)
+                + phi.call(x, a[1], m[1], sigma)
+                + phi.call(x, a[2], m[2], sigma);
     }
 
     public void setChartService(ChartService chartService) {
@@ -90,7 +90,7 @@ public class GaussPeakProcessor {
         m[1] = 2 * Math.exp(Math.log(rho) / 3) * Math.cos(phi / 3) + p / 3;
         m[2] = 2 * Math.exp(Math.log(rho) / 3) * Math.cos(phi / 3 + 2 * Math.PI / 3) + p / 3;
         m[0] = 2 * Math.exp(Math.log(rho) / 3) * Math.cos(phi / 3 + 4 * Math.PI / 3) + p / 3;
-        System.out.println("m's :  " + m[0] + " " + m[1] + " " + m[2] + " ");
+        System.out.println("m[0]=" + m[0] + " m[1]=" + m[1] + " m[2]=" + m[2] + " ");
 
     }
 
@@ -110,7 +110,7 @@ public class GaussPeakProcessor {
         a[1] = Matrix.det(1, b[0], 1, m[0], b[1], m[2], m[0] * m[0], b[2], m[2] * m[2]) / detA;
         a[2] = Matrix.det(1, 1, b[0], m[0], m[1], b[1], m[0] * m[0], m[1] * m[1], b[2]) / detA;
 
-        System.out.println("A's :  " + a[0] + " " + a[1] + " " + a[2] + " ");
+        System.out.println("A[0]=" + a[0] + " A[1]=" + a[1] + " A[2]=" + a[2] + " ");
         return a;
     }
 
@@ -150,32 +150,24 @@ public class GaussPeakProcessor {
 
     private void computeI() {
         double[] yPhi, xPhi;
-        double x_start = -250; //x[0];
-        double x_finish = 250;//x[x.length - 1];
-        int n = (int) ((x_finish - x_start) / hForI);
-        yPhi = new double[n];
-        xPhi = new double[n];
-        for (int i = 0; i < n; i++) {
-            xPhi[i] = x_start + i * hForI;
-            yPhi[i] = phi.call(xPhi[i], 1, 0.5, sig);
+        if (phi.calculateNumerically()) {
+            int n = (int) ((phi.getRightEdge() - phi.getLeftEdge()) / hForI);
+            yPhi = new double[n];
+            xPhi = new double[n];
+            for (int i = 0; i < n; i++) {
+                xPhi[i] = phi.getLeftEdge() + i * hForI;
+                yPhi[i] = phi.call(xPhi[i], 1, 0, sigma);
+            }
+            if (chartService != null) {
+                chartService.add("phi", xPhi, yPhi);
+            }
+            for (int i = 0; i < c; i++) {
+                this.i[i] = FunctionHelper.calculateMu(xPhi, yPhi, i);
+                System.out.println("I[" + i + "] = " + this.i[i]);
+            }
+        } else {
+            this.i = phi.getI(sigma);
         }
-        if (chartService != null) {
-            chartService.add("phi", xPhi, yPhi);
-        }
-
-        for (int i = 0; i < c; i++) {
-            this.i[i] = FunctionHelper.calculateMu(xPhi, yPhi, i);
-            System.out.println("I[" + i + "] = " + this.i[i]);
-        }
-
-       /*/ double sqrt2pi = Math.sqrt(2 * Math.PI);
-        this.i[0] = sig * sqrt2pi + sig * sqrt2pi;
-        this.i[1] = 0;
-        this.i[2] = Math.pow(sig, 3) * sqrt2pi + Math.pow(sig, 3) * sqrt2pi;
-        this.i[3] = 0;
-        this.i[4] = 3 * Math.pow(sig, 2) * sqrt2pi + 3 * Math.pow(sig, 2) * sqrt2pi;
-        this.i[5] = 0;/*/
-
     }
 
     private void computeMu() {
@@ -184,15 +176,11 @@ public class GaussPeakProcessor {
         }
     }
 
-    public double getSig() {
-        return sig;
+    public double getSigma() {
+        return sigma;
     }
 
-    public void setSig(double sig) {
-        this.sig = sig;
-    }
-
-    public double gauss(double x, double a, double m, double sigma) {
-        return a * Math.exp(-((x - m) * (x - m)) / (2 * sigma * sigma));
+    public void setSigma(double sigma) {
+        this.sigma = sigma;
     }
 }

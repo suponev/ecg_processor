@@ -1,6 +1,7 @@
 package sample.domain;
 
 
+import java.util.Arrays;
 
 public class Signal {
     double[] x;
@@ -12,6 +13,17 @@ public class Signal {
     }
 
     public Signal() {
+    }
+
+    public Signal copyFragment(int from, int to) {
+        if (from >= 0 && to > from && y.length >= to) {
+            Signal result = new Signal();
+            result.setX(Arrays.copyOfRange(x, from, to));
+            result.setY(Arrays.copyOfRange(y, from, to));
+            return result;
+        } else {
+            throw new RuntimeException("Could not copy fragment");
+        }
     }
 
     public void setX(double[] x) {

@@ -22,8 +22,8 @@ public class MainService {
         this.chartService = chartService;
     }
 
-    public void selectRegion(int start, int finish) {
-
+    public void selectRegion(int from, int to) {
+        this.workSignal = fullSignal.copyFragment(from, to);
     }
 
     public void selectFile(String fileName) {
@@ -43,8 +43,8 @@ public class MainService {
                 FunctionsRepository.repository.get("double-gauss")
         );
         //gaussPeak.setChartService(chartService);
-        gaussPeak.setSig(sigma);
-        this.chartService.add("Source-Shifted", fullSignal.getX(), y);
+        gaussPeak.setSigma(sigma);
+        this.chartService.add("Source-Shifted", fullSignal.getX(), y, true);
         gaussPeak.calculate();
         double[] model = new double[fullSignal.length()];
 
