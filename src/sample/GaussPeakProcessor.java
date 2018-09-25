@@ -6,7 +6,7 @@ import sample.services.ChartService;
 
 public class GaussPeakProcessor {
 
-    double hForI = 0.001;
+    double hForI = 0.1;
     // double hForI = 0.1;
     private IPhiFunction phi;
 

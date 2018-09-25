@@ -14,12 +14,16 @@ public class MainService {
     private Signal workSignal;
     private FileService fileService;
     private ChartService chartService;
+    private ChartService secondChartService;
     private GaussPeakProcessor gaussPeak;
 
 
-    public MainService(FileService fileService, ChartService chartService) {
+    public MainService(FileService fileService,
+                       ChartService chartService,
+                       ChartService secondChartService) {
         this.fileService = fileService;
         this.chartService = chartService;
+        this.secondChartService = secondChartService;
     }
 
     public void selectRegion(int from, int to) {
@@ -40,9 +44,9 @@ public class MainService {
         gaussPeak = new GaussPeakProcessor(
                 fullSignal.getX(),
                 y,
-                FunctionsRepository.repository.get("double-gauss")
+                FunctionsRepository.repository.get("triple-gauss")
         );
-        //gaussPeak.setChartService(chartService);
+        gaussPeak.setChartService(secondChartService);
         gaussPeak.setSigma(sigma);
         this.chartService.add("Source-Shifted", fullSignal.getX(), y, true);
         gaussPeak.calculate();
