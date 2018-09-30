@@ -1,6 +1,7 @@
 package sample;
 
 import sample.domain.FunctionsRepository;
+import sample.domain.IPhiFunction;
 import sample.services.ChartService;
 import sample.services.FileService;
 import sample.domain.Signal;
@@ -16,6 +17,7 @@ public class MainService {
     private ChartService chartService;
     private ChartService secondChartService;
     private GaussPeakProcessor gaussPeak;
+    private IPhiFunction phi = FunctionsRepository.repository.get("triple-gauss");
 
 
     public MainService(FileService fileService,
@@ -31,6 +33,7 @@ public class MainService {
     }
 
     public void selectFile(String fileName) {
+
         this.fullSignal = fileService.getSignalsMap().get(fileName);
         // this.chartService.add("Source", fullSignal.getX(), fullSignal.getY());
 
@@ -41,12 +44,9 @@ public class MainService {
         for (int i = 0; i < fullSignal.getY().length; i++) {
             y[i] = y[i] + isoline;
         }
-        gaussPeak = new GaussPeakProcessor(
-                fullSignal.getX(),
-                y,
-                FunctionsRepository.repository.get("triple-gauss")
-        );
-        gaussPeak.setChartService(secondChartService);
+
+        gaussPeak = new GaussPeakProcessor(fullSignal.getX(), y, phi);
+        //gaussPeak.setChartService(secondChartService);
         gaussPeak.setSigma(sigma);
         this.chartService.add("Source-Shifted", fullSignal.getX(), y, true);
         gaussPeak.calculate();
@@ -58,6 +58,12 @@ public class MainService {
 
         this.chartService.add("Modeled", fullSignal.getX(), model);
 
+    }
+
+    private void printPhi(ChartService chartService) {
+        chartService.clear();
+
+        //chartService.add("phi",);
     }
 
 

@@ -72,8 +72,8 @@ public class FunctionsRepository {
                     @Override
                     public double call(double x, double a, double m, double sigma) {
                         return +1 * a * Math.exp(-((x + 0 - m) * (x + 0 - m)) / 2 / sigma / sigma)
-                                        - 0.9 * (a * Math.exp(-((x - 1 - m) * (x - 1 - m)) / 2 / sigma / sigma))
-                                        - 0.9 * (a * Math.exp(-((x + 10 - m) * (x + 10 - m)) / 2 / sigma / sigma));
+                                - 0.7 * (a * Math.exp(-((x - 10 - m) * (x - 10 - m)) / 2 / sigma / sigma))
+                                        - 0.7 * (a * Math.exp(-((x + 10 - m) * (x + 10 - m)) / 2 / sigma / sigma));
                     }
 
                     @Override

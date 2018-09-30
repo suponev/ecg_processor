@@ -25,5 +25,9 @@ public class FunctionHelper {
         return integral;
     }
 
+    public static int calculateN(double h, double leftEdge, double rightEdge) {
+        return (int) ((rightEdge - leftEdge) / h);
+    }
+
 
 }

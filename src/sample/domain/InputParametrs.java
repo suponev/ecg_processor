@@ -24,7 +24,5 @@ public class InputParametrs {
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
-
     }
 }

@@ -6,9 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.layout.HBox;
-import javafx.util.Callback;
+import sample.common.ParamCellFactory;
 import sample.services.ChartService;
 import sample.services.FileService;
 
@@ -45,27 +43,13 @@ public class Controller {
 
     @FXML
     void initialize() {
-        data.add("sdad");
-        paramList.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
-            @Override
-            public ListCell<String> call(ListView<String> param) {
-                return new ListCell<String>() {
-                    @Override
-                    protected void updateItem(String myBean, boolean b) {
-                        super.updateItem(myBean, b);
-                        if (!b) {
-                            HBox box = new HBox();
-                            box.setSpacing(50);
-                            box.getChildren().add(new Label(myBean));
-                            box.getChildren().add(new TextField());
-                            setGraphic(box);
-                        } else {
-                            setGraphic(null);
-                        }
-                    }
-                };
-            }
-        });
+        data.add("a1");
+        data.add("a2");
+        data.add("a3");
+        data.add("m1");
+        data.add("m2");
+        data.add("m3");
+        paramList.setCellFactory(new ParamCellFactory());
 
         paramList.setItems(data);
         fileService = new FileService();
