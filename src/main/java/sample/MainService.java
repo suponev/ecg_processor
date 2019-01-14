@@ -46,7 +46,7 @@ public class MainService {
         }
 
         gaussPeak = new GaussPeakProcessor(fullSignal.getX(), y, phi);
-        //gaussPeak.setChartService(secondChartService);
+        gaussPeak.setChartService(secondChartService);
         gaussPeak.setSigma(sigma);
         this.chartService.add("Source-Shifted", fullSignal.getX(), y, true);
         gaussPeak.calculate();

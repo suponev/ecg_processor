@@ -2,9 +2,7 @@ package sample.services;
 
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.input.MouseEvent;
 
-import java.beans.EventHandler;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 

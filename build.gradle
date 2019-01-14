@@ -1,19 +1,27 @@
-apply plugin: 'java'
-apply plugin: 'application'
+buildscript {
+    dependencies {
+        classpath group: 'de.dynamicfiles.projects.gradle.plugins', name: 'javafx-gradle-plugin', version: '8.8.2'
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
 
-mainClassName = 'sample.Main'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+    }
+}
+apply plugin: 'java'
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
-jar {
-    baseName = 'peaks'
-    version =  '0.0.2'
-}
+
+apply plugin: 'javafx-gradle-plugin'
 
 
-dependencies {
-    compile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+jfx {
+    // minimal requirement for jfxJar-task
+    mainClass = 'sample.Main'
+
+    // minimal requirement for jfxNative-task
+    vendor = 'YourName'
 }

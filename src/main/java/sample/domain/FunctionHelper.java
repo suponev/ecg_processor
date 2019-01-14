@@ -1,7 +1,5 @@
 package sample.domain;
 
-import java.util.function.Predicate;
-
 public class FunctionHelper {
 
 

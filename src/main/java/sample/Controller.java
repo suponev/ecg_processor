@@ -15,7 +15,6 @@ import static sample.common.Helper.log;
 
 public class Controller {
 
-
     @FXML()
     TextField sigmaInput = new TextField();
     @FXML()
@@ -43,12 +42,7 @@ public class Controller {
 
     @FXML
     void initialize() {
-        data.add("a1");
-        data.add("a2");
-        data.add("a3");
-        data.add("m1");
-        data.add("m2");
-        data.add("m3");
+
         paramList.setCellFactory(new ParamCellFactory());
 
         paramList.setItems(data);
